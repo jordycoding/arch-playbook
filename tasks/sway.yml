@@ -1,0 +1,36 @@
+- name: Install sway and dependencies
+  community.general.pacman:
+    name: 
+      - sway
+      - swayidle
+      - swaylock
+      - wofi
+      - waybar
+      - grim
+      - slurp
+      - light
+      - alacritty
+      - nodejs
+      - npm
+    state: latest
+  become: yes
+  become_method: doas
+- name: Install aur dependencies
+  kewlfft.aur.aur:
+    name: 
+      - cava
+      - waybar
+      - wlogout
+      - nerd-fonts-jetbrains-mono
+      - wev
+    state: latest
+    use: makepkg
+    skip_pgp_check: yes
+  become: yes
+  become_method: doas
+  become_user: aur_builder
+
+- name: Compile waybar config
+  shell: | 
+    cd {{ansible_env.HOME}}/dotfiles/waybar/.config/waybar
+    npx -y node-sass style.scss > style.css

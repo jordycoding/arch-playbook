@@ -1,0 +1,26 @@
+- name: Create `aur_builder` user
+  user:
+    name: aur_builder
+    create_home: yes
+    group: wheel
+  become: yes
+  become_method: doas
+
+- name: Permit aur_builder to run pacman without password
+  become: yes
+  become_method: doas
+  lineinfile:
+    path: /etc/doas.conf
+    line: 'permit nopass aur_builder cmd /bin/pacman'
+    create: yes
+
+- name: Install yay
+  kewlfft.aur.aur:
+    name: yay
+    state: latest
+    use: makepkg
+  become: yes
+  become_method: doas
+  become_user: aur_builder
+
+

@@ -1,0 +1,24 @@
+- name: Set up arch install
+  hosts: all
+  remote_user: jordy
+
+  vars:
+    plasma: false
+    sway: true
+
+  tasks:
+    - name: Update everything
+      community.general.pacman:
+        update_cache: yes
+        upgrade: yes
+      become: yes
+      become_method: doas
+    - import_tasks: tasks/yay.yml
+    - import_tasks: tasks/dotfiles.yml
+    - import_tasks: tasks/plasma.yml
+      when: plasma
+    - import_tasks: tasks/sway.yml
+      when: sway
+    - import_tasks: tasks/zsh.yml
+    - import_tasks: tasks/nvim.yml
+

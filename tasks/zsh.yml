@@ -1,0 +1,24 @@
+- name: Install zsh
+  community.general.pacman:
+    name: 
+      - zsh
+      - thefuck
+    state: latest
+  become: true
+  become_method: doas
+- name: Set zsh as default shell
+  shell: "chsh -s /bin/zsh jordy"
+  become: yes
+  become_method: doas
+- name: Install starship prompt
+  shell: curl -fsSL https://starship.rs/install.sh | sh -s -- --yes
+  become: yes
+  become_method: doas
+- name: Install pfetch
+  kewlfft.aur.aur:
+    name: pfetch
+    state: latest
+    use: makepkg
+  become: yes
+  become_method: doas
+  become_user: aur_builder

@@ -1,0 +1,21 @@
+- name: Install stow
+  community.general.pacman:
+    name: stow
+    state: latest
+  become: yes
+  become_method: doas
+- name: Clone dotfiles repo
+  git:
+    repo: https://github.com/jordycoding/Dotfiles-xps
+    dest: "{{ansible_env.HOME}}/dotfiles"
+- name: Stow dotfiles
+  shell: |
+    cd "{{ansible_env.HOME}}"/dotfiles
+    stow nvim
+    stow waybar
+    stow zsh
+    stow sway
+    stow swaylock
+    stow alacritty
+    stow cava
+
